@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-royal-gold: #D4AF37;
+  --color-royal-blue: #0F172A;
+  --color-deep-red: #800020;
+  --color-off-white: #F9FAFB;
+  --color-glass: rgba(255, 255, 255, 0.1);
+
+  --font-family-playfair: "Playfair Display", serif;
+  --font-family-lato: "Lato", sans-serif;
+}
+
+body {
+  background-color: var(--color-royal-blue);
+  color: var(--color-off-white);
+  font-family: var(--font-family-lato);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-playfair);
+}
+
+.glass-effect {
+  background-color: var(--color-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b5952f;
+}
+
+/* Rolling Button Animation */
+@keyframes roll-up {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-100%) rotateX(90deg);
+  }
+
+  51% {
+    transform: translateY(100%) rotateX(-90deg);
+  }
+
+  100% {
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+.animate-roll-up {
+  animation: roll-up 0.6s ease-in-out;
+}
+
+/* Swiper Pagination Custom Styles */
+.swiper-pagination {
+  bottom: 40px !important;
+}
+
+.swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background: rgba(212, 175, 55, 0.5) !important;
+  opacity: 1 !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: #D4AF37 !important;
+  width: 40px !important;
+  border-radius: 6px !important;
+}
