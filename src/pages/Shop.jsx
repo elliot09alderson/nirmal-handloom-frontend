@@ -15,8 +15,9 @@ const Shop = () => {
     const [error, setError] = useState(null);
 
     // Filter States
+    // Filter States
     const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
-    const [category, setCategory] = useState(searchParams.get('category') || '');
+    const [categories, setCategories] = useState(searchParams.get('category') ? searchParams.get('category').split(',') : []);
     const [priceRange, setPriceRange] = useState(50000);
     const [sortBy, setSortBy] = useState('newest'); // 'newest', 'price-low', 'price-high'
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -54,7 +55,11 @@ const Shop = () => {
     useEffect(() => {
         const catParam = searchParams.get('category');
         const keywordParam = searchParams.get('keyword');
-        if (catParam) setCategory(catParam);
+        if (catParam) {
+             setCategories(catParam.split(','));
+        } else {
+             setCategories([]);
+        }
         if (keywordParam) setKeyword(keywordParam);
     }, [searchParams]);
 
@@ -63,7 +68,6 @@ const Shop = () => {
             setLoading(true);
             try {
                 // Mock Backend Filter Logic
-                // in real app: const { data } = await api.get(`/products?keyword=${keyword}&category=${category}...`);
                 const { data } = await api.get('/products');
                 
                 // Validate data structure
@@ -82,11 +86,11 @@ const Shop = () => {
         const applyFilters = (data) => {
             let filtered = [...data];
 
-            // Category Filter
-            if (category) {
+            // Category Filter (Multiple)
+            if (categories.length > 0) {
                 filtered = filtered.filter(p => {
-                    const pCat = p.category.name || p.category;
-                    return pCat === category;
+                    const pCat = p.category?.name || p.category;
+                    return categories.includes(pCat);
                 });
             }
 
@@ -95,7 +99,7 @@ const Shop = () => {
                 const lowerKeyword = keyword.toLowerCase();
                 filtered = filtered.filter(p => 
                     p.name.toLowerCase().includes(lowerKeyword) ||
-                    (p.category.name || p.category).toLowerCase().includes(lowerKeyword)
+                    (p.category?.name || p.category || '').toLowerCase().includes(lowerKeyword)
                 );
             }
 
@@ -109,7 +113,7 @@ const Shop = () => {
                 filtered.sort((a, b) => b.price - a.price);
             } else {
                 // Newest (Mock logic: essentially maintain order or sort by ID)
-                filtered.sort((a, b) => b.id - a.id);
+                filtered.sort((a, b) => (b._id || b.id) - (a._id || a.id));
             }
 
             setProducts(filtered);
@@ -117,15 +121,29 @@ const Shop = () => {
         };
 
         fetchProducts();
-    }, [keyword, category, priceRange, sortBy]);
+    }, [keyword, categories, priceRange, sortBy]);
 
     const handleCategorySelect = (cat) => {
-        setCategory(cat === category ? '' : cat); // Toggle off if clicked again
-        setIsMobileFilterOpen(false);
+        let newCategories;
+        if (categories.includes(cat)) {
+            newCategories = categories.filter(c => c !== cat);
+        } else {
+            newCategories = [...categories, cat];
+        }
+        setCategories(newCategories);
+        
+        // Update URL
+        if (newCategories.length > 0) {
+            setSearchParams({ ...Object.fromEntries(searchParams), category: newCategories.join(',') });
+        } else {
+             const params = Object.fromEntries(searchParams);
+             delete params.category;
+             setSearchParams(params);
+        }
     };
 
     const clearFilters = () => {
-        setCategory('');
+        setCategories([]);
         setKeyword('');
         setPriceRange(50000);
         setSortBy('newest');
@@ -204,13 +222,13 @@ const Shop = () => {
                                                             <input 
                                                                 type="checkbox"
                                                                 id={item}
-                                                                checked={category === item}
+                                                                checked={categories.includes(item)}
                                                                 onChange={() => handleCategorySelect(item)}
                                                                 className="accent-royal-gold w-4 h-4 rounded-sm border-gray-600 bg-transparent"
                                                             />
                                                             <label 
                                                                 htmlFor={item}
-                                                                className={`ml-3 text-sm cursor-pointer transition-colors ${category === item ? 'text-royal-gold font-bold' : 'text-gray-400 hover:text-white'}`}
+                                                                className={`ml-3 text-sm cursor-pointer transition-colors ${categories.includes(item) ? 'text-royal-gold font-bold' : 'text-gray-400 hover:text-white'}`}
                                                             >
                                                                 {item}
                                                             </label>
