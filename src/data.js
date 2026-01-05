@@ -1,7 +1,7 @@
 export const categories = [
     {
         id: 1,
-        name: 'Banarsi Silk',
+        name: 'Banarsi Sil',
         image: '/assets/saree_model_1.png',
         description: 'The pride of Varanasi, known for gold and silver brocade.',
     },
