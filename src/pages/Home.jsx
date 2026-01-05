@@ -22,11 +22,19 @@ const Home = () => {
                 // In a real scenario, you'd pass filters to the backend
                 // For now, we'll fetch all products
                 const { data } = await api.get('/products');
-                // Backend now returns object with products array and pagination
-                setProducts(data.products || data);
+                
+                // Validate that we received expected data structure
+                if (data && (Array.isArray(data) || (data.products && Array.isArray(data.products)))) {
+                     // Backend now returns object with products array and pagination
+                     setProducts(data.products || data);
+                } else {
+                    console.error("Invalid API response format (expected array):", data);
+                    // Force fallback logic to trigger
+                    throw new Error("Invalid API response");
+                }
                 setLoading(false);
             } catch (err) {
-                console.warn("Backend failed, using mock data:", err);
+                console.warn("Backend fetch failed or invalid response, using mock data.", err);
                 // Fallback to mock data
                 setProducts(mockProducts);
                 setLoading(false);

@@ -64,8 +64,15 @@ const Shop = () => {
             try {
                 // Mock Backend Filter Logic
                 // in real app: const { data } = await api.get(`/products?keyword=${keyword}&category=${category}...`);
-                const { data } = await api.get('/products'); 
-                applyFilters(data.products || data || mockProducts);
+                const { data } = await api.get('/products');
+                
+                // Validate data structure
+                if (data && (Array.isArray(data) || (data.products && Array.isArray(data.products)))) {
+                     applyFilters(data.products || data);
+                } else {
+                     console.warn("Invalid API format in Shop, using mock data");
+                     applyFilters(mockProducts);
+                }
             } catch (err) {
                 console.warn("Backend failed/mocking:", err);
                 applyFilters(mockProducts);

@@ -48,12 +48,18 @@ const AdminProducts = () => {
     const fetchProducts = async () => {
         try {
             const { data } = await api.get(`/products?page=${page}&limit=20&showAll=true`);
-            setProducts(data.products);
-            setPage(data.page);
-            setPages(data.pages);
+            if (data && data.products && Array.isArray(data.products)) {
+                setProducts(data.products);
+                setPage(data.page || 1);
+                setPages(data.pages || 1);
+            } else {
+                 console.error("Invalid response format:", data);
+                 setProducts([]); 
+            }
             setLoading(false);
         } catch (error) {
             console.error("Error fetching products", error);
+            setProducts([]); // Ensure valid array on error
             setLoading(false);
         }
     };
