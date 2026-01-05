@@ -38,12 +38,13 @@ const Navbar = () => {
         { name: 'Shop', href: '/shop' },
         { name: 'Collections', href: '/#collections' },
         { name: 'New Arrivals', href: '/#new-arrivals' },
-        { name: 'About Us', href: '/#about' },
     ];
 
     const handleLogout = () => {
-        logout();
-        navigate('/login');
+        if (window.confirm('Are you sure you want to logout?')) {
+            logout();
+            navigate('/login');
+        }
     };
 
     return (
@@ -172,6 +173,9 @@ const Navbar = () => {
                                 <span className="ml-2 text-sm max-w-[100px] truncate">{user.name}</span>
                             </button>
                             <div className="absolute right-0 mt-2 w-48 bg-royal-blue border border-white/10 rounded-sm shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                {user.role === 'admin' && (
+                                    <Link to="/admin" className="block px-4 py-2 text-sm text-off-white hover:bg-white/10">Admin Dashboard</Link>
+                                )}
                                 <Link to="/profile" className="block px-4 py-2 text-sm text-off-white hover:bg-white/10">Profile</Link>
                                 <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-off-white hover:bg-white/10">Logout</button>
                             </div>

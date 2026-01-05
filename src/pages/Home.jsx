@@ -22,7 +22,8 @@ const Home = () => {
                 // In a real scenario, you'd pass filters to the backend
                 // For now, we'll fetch all products
                 const { data } = await api.get('/products');
-                setProducts(data);
+                // Backend now returns object with products array and pagination
+                setProducts(data.products || data);
                 setLoading(false);
             } catch (err) {
                 console.warn("Backend failed, using mock data:", err);

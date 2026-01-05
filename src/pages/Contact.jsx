@@ -7,8 +7,9 @@ const Contact = () => {
             <h1 className="text-4xl md:text-5xl font-playfair text-center mb-16 text-royal-gold">Contact Us</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {/* Contact Information */}
+                {/* Left Column: Contact Info & Business Details */}
                 <div className="space-y-8">
+                    {/* Contact Information */}
                     <div className="bg-white/5 p-8 rounded-sm border border-white/10">
                         <h2 className="text-2xl font-playfair mb-6 text-white">Get in Touch</h2>
                         <ul className="space-y-6 font-lato">
@@ -16,8 +17,8 @@ const Contact = () => {
                                 <FiMapPin className="text-royal-gold mt-1 mr-4 shrink-0" size={24} />
                                 <div>
                                     <strong className="block text-lg text-white mb-1">Visit Us</strong>
-                                    <p className="text-gray-400">Shop No 5, Silk Market,</p>
-                                    <p className="text-gray-400">Varanasi, Uttar Pradesh 221001,</p>
+                                    <p className="text-gray-400">B-4 Wholesale Cloth Market,</p>
+                                    <p className="text-gray-400">Pulgaon, Durg (C.G.),</p>
                                     <p className="text-gray-400">India</p>
                                 </div>
                             </li>
@@ -25,19 +26,20 @@ const Contact = () => {
                                 <FiPhone className="text-royal-gold mr-4 shrink-0" size={24} />
                                 <div>
                                     <strong className="block text-lg text-white mb-1">Call Us</strong>
-                                    <p className="text-gray-400">+91 98765 43210</p>
+                                    <p className="text-gray-400">+91 62613 41129</p>
                                 </div>
                             </li>
                             <li className="flex items-center tracking-wide">
                                 <FiMail className="text-royal-gold mr-4 shrink-0" size={24} />
                                 <div>
                                     <strong className="block text-lg text-white mb-1">Email Us</strong>
-                                    <p className="text-gray-400">support@nirmalhandloom.com</p>
+                                    <p className="text-gray-400">dewangammayanku@gmail.com</p>
                                 </div>
                             </li>
                         </ul>
                     </div>
 
+                    {/* Business Hours */}
                     <div className="bg-white/5 p-8 rounded-sm border border-white/10">
                         <h2 className="text-2xl font-playfair mb-4 text-white">Business Hours</h2>
                         <ul className="space-y-2 text-gray-400 font-lato">
@@ -55,10 +57,22 @@ const Contact = () => {
                             </li>
                         </ul>
                     </div>
+
+                     {/* Business Details */}
+                     <div className="bg-white/5 p-8 rounded-sm border border-white/10">
+                        <h2 className="text-2xl font-playfair mb-6 text-white">Business Details</h2>
+                        <ul className="space-y-4 font-lato text-gray-300">
+                             <li>
+                                <strong className="text-royal-gold block mb-1">GSTIN</strong>
+                                22GNDPD9001GI2J
+                            </li>
+
+                        </ul>
+                    </div>
                 </div>
 
-                {/* Contact Form */}
-                <div className="bg-white/5 p-8 rounded-sm border border-white/10">
+                {/* Right Column: Contact Form */}
+                <div className="bg-white/5 p-8 rounded-sm border border-white/10 h-fit">
                     <h2 className="text-2xl font-playfair mb-6 text-white">Send us a Message</h2>
                     <form className="space-y-6">
                         <div>

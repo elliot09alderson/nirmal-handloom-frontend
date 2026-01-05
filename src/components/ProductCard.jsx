@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FiHeart, FiShoppingBag } from 'react-icons/fi';
 import { ShopContext } from '../context/ShopContext';
 import { useNavigate } from 'react-router-dom';
+import { getImageUrl } from '../utils/api';
 
 const ProductCard = ({ product, onOpen }) => {
     const { addToCart, addToWishlist, isInWishlist, cart } = useContext(ShopContext);
@@ -16,9 +17,6 @@ const ProductCard = ({ product, onOpen }) => {
 
     const handleNavigate = () => {
         // If onOpen is passed (e.g. for modal), use it, otherwise navigate
-        // But the user prioritized navigation to details page even for "selection"
-        // so we default to navigation unless strictly modal is required, 
-        // but for now let's just use navigation as the primary action.
         navigate(`/product/${product._id || product.id}`);
     };
 
@@ -49,7 +47,7 @@ const ProductCard = ({ product, onOpen }) => {
             {/* Image Container */}
             <div className="relative h-[22rem] overflow-hidden mb-4">
                 <img
-                    src={product.image}
+                    src={getImageUrl(product.image)}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -93,7 +91,7 @@ const ProductCard = ({ product, onOpen }) => {
             {/* Details - Minimal */}
             <div className="text-center pb-2">
                 <p className="text-xs text-royal-gold uppercase tracking-wider mb-1">
-                    {product.category.name || product.category}
+                    {product.category?.name || product.category || 'Collection'}
                 </p>
                 <h3 className="text-base font-playfair text-off-white mb-2 group-hover:text-royal-gold transition-colors">
                     {product.name}

@@ -33,53 +33,82 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-royal-blue pt-24 px-6 flex justify-center items-center">
-             <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white/5 border border-white/10 p-8 rounded-sm w-full max-w-md backdrop-blur-sm"
+        <div className="min-h-screen bg-royal-blue flex justify-center items-center px-6 relative overflow-hidden">
+            {/* Background Decorative Elements */}
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-royal-gold/5 rounded-full blur-[120px]" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-royal-gold/5 rounded-full blur-[120px]" />
+
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white/5 border border-white/10 p-10 rounded-2xl w-full max-w-md backdrop-blur-md shadow-2xl relative z-10"
             >
-                <h2 className="text-3xl font-playfair text-off-white mb-8 text-center">Register</h2>
-                {message && <div className="bg-red-500/20 text-red-200 p-3 mb-4 rounded-sm text-sm border border-red-500/30">{message}</div>}
-                {error && <div className="bg-red-500/20 text-red-200 p-3 mb-4 rounded-sm text-sm border border-red-500/30">{error}</div>}
+                <div className="text-center mb-10">
+                    <h2 className="text-4xl font-playfair text-off-white mb-2">Create Account</h2>
+                    <p className="text-gray-400 font-lato text-sm">Join the Nirmal Handloom family</p>
+                </div>
+
+                {message && (
+                    <motion.div 
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="bg-red-500/10 text-red-400 p-4 mb-6 rounded-lg text-sm border border-red-500/20 text-center font-lato"
+                    >
+                        {message}
+                    </motion.div>
+                )}
+                {error && (
+                    <motion.div 
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="bg-red-500/10 text-red-400 p-4 mb-6 rounded-lg text-sm border border-red-500/20 text-center font-lato"
+                    >
+                        {error}
+                    </motion.div>
+                )}
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-royal-gold text-sm uppercase tracking-wide mb-2">Full Name</label>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="group">
+                        <label className="block text-royal-gold text-xs uppercase tracking-[0.2em] mb-2 font-bold font-lato">Full Name</label>
                         <input
                             type="text"
                             required
-                            className="w-full bg-white/5 border border-white/20 rounded-sm py-3 px-4 text-white focus:outline-none focus:border-royal-gold transition-colors"
+                            placeholder="John Doe"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-5 text-white font-lato placeholder:text-gray-600 focus:outline-none focus:border-royal-gold focus:bg-white/10 transition-all duration-300"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
-                     <div>
-                        <label className="block text-royal-gold text-sm uppercase tracking-wide mb-2">Email Address</label>
+                    <div className="group">
+                        <label className="block text-royal-gold text-xs uppercase tracking-[0.2em] mb-2 font-bold font-lato">Email Address</label>
                         <input
                             type="email"
                             required
-                            className="w-full bg-white/5 border border-white/20 rounded-sm py-3 px-4 text-white focus:outline-none focus:border-royal-gold transition-colors"
+                            placeholder="your@email.com"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-5 text-white font-lato placeholder:text-gray-600 focus:outline-none focus:border-royal-gold focus:bg-white/10 transition-all duration-300"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
-                    <div>
-                        <label className="block text-royal-gold text-sm uppercase tracking-wide mb-2">Password</label>
+                    <div className="group">
+                        <label className="block text-royal-gold text-xs uppercase tracking-[0.2em] mb-2 font-bold font-lato">Password</label>
                         <input
                             type="password"
                             required
-                            className="w-full bg-white/5 border border-white/20 rounded-sm py-3 px-4 text-white focus:outline-none focus:border-royal-gold transition-colors"
+                            placeholder="••••••••"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-5 text-white font-lato placeholder:text-gray-600 focus:outline-none focus:border-royal-gold focus:bg-white/10 transition-all duration-300"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <div>
-                        <label className="block text-royal-gold text-sm uppercase tracking-wide mb-2">Confirm Password</label>
+                    <div className="group">
+                        <label className="block text-royal-gold text-xs uppercase tracking-[0.2em] mb-2 font-bold font-lato">Confirm Password</label>
                         <input
                             type="password"
                             required
-                            className="w-full bg-white/5 border border-white/20 rounded-sm py-3 px-4 text-white focus:outline-none focus:border-royal-gold transition-colors"
+                            placeholder="••••••••"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-5 text-white font-lato placeholder:text-gray-600 focus:outline-none focus:border-royal-gold focus:bg-white/10 transition-all duration-300"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
@@ -87,14 +116,17 @@ const Register = () => {
                     
                     <button
                         type="submit"
-                        className="w-full bg-royal-gold text-royal-blue font-bold py-3 uppercase tracking-wide hover:bg-white transition-colors mt-4"
+                        className="w-full bg-royal-gold hover:bg-white text-royal-blue font-bold py-4 rounded-xl uppercase tracking-widest transition-all duration-500 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-royal-gold/10 mt-4 font-lato"
                     >
                         Register
                     </button>
                 </form>
 
-                <div className="mt-6 text-center text-gray-400 text-sm">
-                    Already have an account? <Link to="/login" className="text-royal-gold hover:text-white underline">Sign In</Link>
+                <div className="mt-8 text-center font-lato text-sm">
+                    <span className="text-gray-500">Already have an account? </span>
+                    <Link to="/login" className="text-royal-gold hover:text-white transition-colors underline underline-offset-4">
+                        Sign In
+                    </Link>
                 </div>
             </motion.div>
         </div>

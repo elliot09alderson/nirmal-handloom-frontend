@@ -64,8 +64,8 @@ const Shop = () => {
             try {
                 // Mock Backend Filter Logic
                 // in real app: const { data } = await api.get(`/products?keyword=${keyword}&category=${category}...`);
-                const { data } = await api.get('/products'); // fetching all for client-side filtering demo
-                applyFilters(data || mockProducts);
+                const { data } = await api.get('/products'); 
+                applyFilters(data.products || data || mockProducts);
             } catch (err) {
                 console.warn("Backend failed/mocking:", err);
                 applyFilters(mockProducts);

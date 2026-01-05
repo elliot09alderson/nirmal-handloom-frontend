@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import api from '../../utils/api';
+import api, { getImageUrl } from '../../utils/api';
 import { FiPlus, FiTrash2, FiX } from 'react-icons/fi';
 
 const AdminCategories = () => {
@@ -8,7 +8,9 @@ const AdminCategories = () => {
     const [loading, setLoading] = useState(true);
     const [isCatModalOpen, setIsCatModalOpen] = useState(false);
     
-    const [newCategory, setNewCategory] = useState({ name: '', description: '', image: '' });
+    const [newCategory, setNewCategory] = useState({ name: '', description: '' });
+    const [imageFile, setImageFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState('');
 
     useEffect(() => {
         fetchCategories();
@@ -36,14 +38,35 @@ const AdminCategories = () => {
         }
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file);
+            setImagePreview(URL.createObjectURL(file));
+        }
+    };
+
     const handleCreateCategory = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/categories', newCategory);
+            const formData = new FormData();
+            formData.append('name', newCategory.name);
+            formData.append('description', newCategory.description);
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+
+            await api.post('/categories', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
             setIsCatModalOpen(false);
-            setNewCategory({ name: '', description: '', image: '' });
+            setNewCategory({ name: '', description: '' });
+            setImageFile(null);
+            setImagePreview('');
             fetchCategories();
         } catch (error) {
+            console.error(error);
             alert(error.response?.data?.message || 'Error creating category');
         }
     };
@@ -68,17 +91,30 @@ const AdminCategories = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {categories.map((cat) => (
-                        <div key={cat._id} className="bg-white/5 border border-white/10 rounded-sm p-6 relative group">
+                        <div key={cat._id} className="bg-white/5 border border-white/10 rounded-xl p-6 relative group hover:border-royal-gold/30 transition-all overflow-hidden">
                             <button 
                                 onClick={() => handleDelete(cat._id)}
-                                className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-black/50 p-2 rounded-full hover:bg-red-500 hover:text-white"
                             >
                                 <FiTrash2 />
                             </button>
+                            
+                            {cat.image && (
+                                <div className="w-full h-32 mb-4 rounded-lg overflow-hidden border border-white/10">
+                                    <img 
+                                        src={getImageUrl(cat.image)} 
+                                        alt={cat.name}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                    />
+                                </div>
+                            )}
+
                             <h3 className="text-xl font-bold text-royal-gold mb-2">{cat.name}</h3>
-                            <p className="text-gray-400 text-sm mb-4">{cat.description}</p>
-                            <div className="mt-4 pt-4 border-t border-white/10">
-                                <span className="text-xs text-gray-500 uppercase">ID: {cat._id}</span>
+                            <p className="text-gray-400 text-sm mb-4 line-clamp-2">{cat.description}</p>
+                            <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center text-xs text-gray-500 uppercase">
+                                <span>ID: {cat._id.slice(-6)}</span>
+                                <span className="px-2 py-1 bg-white/10 rounded">{cat.isActive ? 'Active' : 'Inactive'}</span>
                             </div>
                         </div>
                     ))}
@@ -102,10 +138,24 @@ const AdminCategories = () => {
                             </div>
                             <div>
                                 <label className="block text-sm text-royal-gold mb-1">Description</label>
-                                <textarea required rows="3" className="w-full bg-white/5 border border-white/20 p-2 text-white" 
+                                <textarea required rows="3" className="w-full bg-white/5 border border-white/20 p-2 text-white rounded" 
                                     value={newCategory.description} onChange={(e) => setNewCategory({...newCategory, description: e.target.value})}></textarea>
                             </div>
-                             {/* Image upload would go here */}
+                             
+                            <div>
+                                <label className="block text-sm text-royal-gold mb-1">Category Image</label>
+                                <input 
+                                    type="file" 
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="w-full bg-white/5 border border-white/20 p-2 text-white rounded text-sm"
+                                />
+                                {imagePreview && (
+                                    <div className="mt-2 w-full h-32 rounded border border-white/20 overflow-hidden">
+                                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                    </div>
+                                )}
+                            </div>
                             
                             <button type="submit" className="w-full bg-royal-gold text-royal-blue font-bold py-3 mt-4 hover:bg-white">Create Category</button>
                         </form>

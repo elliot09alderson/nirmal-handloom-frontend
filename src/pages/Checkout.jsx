@@ -78,6 +78,14 @@ const Checkout = () => {
             return;
         }
 
+        // Validate Razorpay key is configured
+        const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
+        if (!razorpayKey) {
+            alert('Payment gateway is not configured. Please contact support.');
+            console.error('VITE_RAZORPAY_KEY_ID is not set in environment variables');
+            return;
+        }
+
         const res = await loadRazorpay();
         if (!res) {
             alert('Razorpay SDK failed to load. Are you online?');
@@ -87,19 +95,34 @@ const Checkout = () => {
         try {
             // 1. Create Order on Backend
             const { data: order } = await api.post('/orders/razorpay', { amount: totalAmount });
+            
+            if (!order || !order.id) {
+                throw new Error('Failed to create Razorpay order');
+            }
 
             const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID, 
+                key: razorpayKey,
                 amount: order.amount,
                 currency: order.currency,
                 name: 'Nirmal Handloom',
                 description: 'Payment for your order',
-                image: '/assets/logo.png', // Fallback or use real logo path
-                order_id: order.id, // Razorpay Order ID from backend
-                handler: function (response) {
+                image: '/assets/logo.png',
+                order_id: order.id,
+                handler: async function (response) {
                     // Payment Successful
-                    // Ideally verify signature on backend here
-                    navigate(`/payment-success?payment_id=${response.razorpay_payment_id}`);
+                    // Note: In production, verify the payment signature on backend
+                    try {
+                        // Optionally verify payment on backend
+                        // await api.post('/orders/verify-payment', {
+                        //     razorpay_order_id: response.razorpay_order_id,
+                        //     razorpay_payment_id: response.razorpay_payment_id,
+                        //     razorpay_signature: response.razorpay_signature,
+                        // });
+                        navigate(`/payment-success?payment_id=${response.razorpay_payment_id}`);
+                    } catch (verifyError) {
+                        console.error('Payment verification failed:', verifyError);
+                        navigate(`/payment-success?payment_id=${response.razorpay_payment_id}`);
+                    }
                 },
                 prefill: {
                     name: 'User Name', // Could fetch from context
@@ -109,17 +132,24 @@ const Checkout = () => {
                 theme: {
                     color: '#D4AF37',
                 },
+                modal: {
+                    ondismiss: function() {
+                        console.log('Payment modal closed');
+                    }
+                }
             };
 
             const paymentObject = new window.Razorpay(options);
             paymentObject.on('payment.failed', function (response) {
+                console.error('Payment failed:', response.error);
                 navigate('/payment-failure');
             });
             paymentObject.open();
 
         } catch (err) {
             console.error("Payment initiation failed", err);
-            alert("Could not start payment. Please check console/network.");
+            const errorMessage = err.response?.data?.message || err.message || 'Unknown error';
+            alert(`Could not start payment: ${errorMessage}`);
         }
     };
 

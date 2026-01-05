@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { categories } from '../data';
+import api from '../utils/api';
+import { categories as fallbackCategories } from '../data';
 
 const Categories = () => {
     const navigate = useNavigate();
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const { data } = await api.get('/categories');
+                setCategories(data);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+                setCategories(fallbackCategories);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handleCategoryClick = (categoryName) => {
         navigate(`/shop?category=${encodeURIComponent(categoryName)}`);
     };
+
+    if (categories.length === 0) return null;
 
     return (
         <section id="collections" className="py-20 px-6 bg-royal-blue relative">
@@ -22,7 +39,7 @@ const Categories = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {categories.map((category, index) => (
                         <motion.div
-                            key={category.id}
+                            key={category._id}
                             initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
