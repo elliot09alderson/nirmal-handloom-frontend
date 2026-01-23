@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 import api from '../utils/api';
 import { products as mockProducts } from '../data';
+import SEO from '../components/SEO';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -80,6 +81,11 @@ const ProductDetails = () => {
 
     return (
         <div className="container mx-auto px-6 py-24">
+             <SEO 
+                title={product.name} 
+                description={product.description}
+                image={activeImage}
+            />
             <button
                 onClick={() => navigate(-1)}
                 className="flex items-center text-royal-gold mb-8 hover:text-white transition-colors"

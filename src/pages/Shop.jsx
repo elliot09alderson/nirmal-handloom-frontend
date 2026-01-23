@@ -6,6 +6,7 @@ import ProductCard from '../components/ProductCard';
 import ProductModal from '../components/ProductModal';
 import api from '../utils/api';
 import { products as mockProducts } from '../data';
+import SEO from '../components/SEO';
 
 const Shop = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -152,6 +153,10 @@ const Shop = () => {
 
     return (
         <div className="bg-royal-blue min-h-screen pt-10 pb-20">
+            <SEO 
+                title="Shop Collection" 
+                description="Browse our exclusive collection of handloom sarees, including Banarasi, Kanjivaram, and Chanderi silk." 
+            />
             {/* Header */}
             <div className="bg-royal-blue border-b border-white/10 pb-8 mb-8">
                 <div className="container mx-auto px-6 text-center">

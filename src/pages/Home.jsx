@@ -9,6 +9,9 @@ import ProductModal from '../components/ProductModal';
 import api from '../utils/api';
 import { products as mockProducts } from '../data';
 
+import Link from 'react-router-dom';
+import SEO from '../components/SEO';
+
 const Home = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [products, setProducts] = useState([]);
@@ -46,6 +49,10 @@ const Home = () => {
 
     return (
         <>
+            <SEO 
+                title="Home" 
+                description="Welcome to Nirmal Handloom - Explore our exquisite collection of handloom sarees and fabrics." 
+            />
             <Hero />
             <Features />
             <Categories />

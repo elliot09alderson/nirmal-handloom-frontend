@@ -50,8 +50,9 @@ const AdminUsers = () => {
     };
 
     const filteredUsers = users.filter(user => 
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+        (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) || 
+        (user.email && user.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (user.phone && user.phone.includes(searchTerm))
     );
 
     return (
@@ -96,12 +97,12 @@ const AdminUsers = () => {
                                     >
                                         <td className="p-5">
                                             <div className="flex items-center gap-3">
-                                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-royal-gold/20 to-royal-blue border border-white/10 flex items-center justify-center font-bold text-royal-gold">
-                                                    {user.name.charAt(0)}
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-royal-gold/20 to-royal-blue border border-white/10 flex items-center justify-center font-bold text-royal-gold">
+                                                    {user.name ? user.name.charAt(0) : '?'}
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-white">{user.name}</p>
-                                                    <p className="text-xs text-gray-400">{user.email}</p>
+                                                    <p className="font-bold text-white">{user.name || 'Unknown'}</p>
+                                                    <p className="text-xs text-gray-400">{user.email || user.phone || 'No Contact'}</p>
                                                 </div>
                                             </div>
                                         </td>

@@ -1,9 +1,14 @@
 import React from 'react';
 import { FiMapPin, FiPhone, FiMail } from 'react-icons/fi';
+import SEO from '../components/SEO';
 
 const Contact = () => {
     return (
         <div className="container mx-auto px-6 py-24 text-off-white">
+            <SEO 
+                title="Contact Us" 
+                description="Get in touch with Nirmal Handloom. Visit our store in Pulgaon, Durg, or contact us for inquiries about our handloom sarees." 
+            />
             <h1 className="text-4xl md:text-5xl font-playfair text-center mb-16 text-royal-gold">Contact Us</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -33,7 +38,7 @@ const Contact = () => {
                                 <FiMail className="text-royal-gold mr-4 shrink-0" size={24} />
                                 <div>
                                     <strong className="block text-lg text-white mb-1">Email Us</strong>
-                                    <p className="text-gray-400">dewangammayanku@gmail.com</p>
+                                    <p className="text-gray-400">dewanganmayanku@gmail.com</p>
                                 </div>
                             </li>
                         </ul>
@@ -64,7 +69,7 @@ const Contact = () => {
                         <ul className="space-y-4 font-lato text-gray-300">
                              <li>
                                 <strong className="text-royal-gold block mb-1">GSTIN</strong>
-                                22GNDPD9001GI2J
+                                22GNDPD9001G1ZJ
                             </li>
 
                         </ul>
