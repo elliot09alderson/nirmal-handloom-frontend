@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
-import { FiHeart, FiShoppingBag, FiStar, FiArrowLeft, FiShare2 } from 'react-icons/fi';
+import { FiHeart, FiShoppingBag, FiStar, FiArrowLeft, FiShare2, FiMinus, FiPlus } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 import api from '../utils/api';
@@ -11,16 +11,12 @@ import SEO from '../components/SEO';
 const ProductDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { addToCart, addToWishlist, isInWishlist, cart } = useContext(ShopContext);
+    const { addToCart, addToWishlist, isInWishlist, cart, updateQuantity, removeFromCart } = useContext(ShopContext);
     const [product, setProduct] = useState(null);
     const [recommended, setRecommended] = useState([]);
     const [activeImage, setActiveImage] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    // ... (rest of code)
-
-
 
     useEffect(() => {
         const fetchProductDetails = async () => {
@@ -172,17 +168,31 @@ const ProductDetails = () => {
                     </p>
 
                     <div className="flex space-x-4 mb-8">
-                        <button
-                            onClick={() => addToCart(product)}
-                            className={`flex-1 font-bold py-4 px-6 rounded-sm transition-colors flex items-center justify-center space-x-2 ${
-                                cartItem 
-                                ? 'bg-green-600/90 text-white hover:bg-green-600' 
-                                : 'bg-royal-gold text-royal-blue hover:bg-white'
-                            }`}
-                        >
-                            <FiShoppingBag size={20} />
-                            <span>{cartItem ? `Added (${cartItem.quantity})` : 'Add to Cart'}</span>
-                        </button>
+                        {cartItem ? (
+                            <div className="flex-1 flex items-center justify-between bg-green-600/90 text-white rounded-sm px-6 py-4 font-bold border border-green-600">
+                                <button
+                                    onClick={() => cartItem.quantity > 1 ? updateQuantity(cartItem.id, -1) : removeFromCart(cartItem.id)}
+                                    className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                                >
+                                    <FiMinus size={18} />
+                                </button>
+                                <span className="mx-4">{cartItem.quantity} Added</span>
+                                <button
+                                    onClick={() => updateQuantity(cartItem.id, 1)}
+                                    className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                                >
+                                    <FiPlus size={18} />
+                                </button>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={() => addToCart(product)}
+                                className="flex-1 font-bold py-4 px-6 rounded-sm transition-colors flex items-center justify-center space-x-2 bg-royal-gold text-royal-blue hover:bg-white"
+                            >
+                                <FiShoppingBag size={20} />
+                                <span>Add to Cart</span>
+                            </button>
+                        )}
                         <button
                             onClick={() => addToWishlist(product)}
                             className={`p-4 border border-white/20 rounded-sm transition-colors flex items-center justify-center ${isInWishlist(product._id || product.id)
