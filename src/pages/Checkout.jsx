@@ -236,7 +236,7 @@ const Checkout = () => {
                                 />
                                 <div className="ml-6 flex-1">
                                     <h3 className="text-base font-bold text-off-white">{item.name}</h3>
-                                    <p className="text-xs text-royal-gold">{item.category}</p>
+                                    <p className="text-xs text-royal-gold">{item.category?.name || (typeof item.category === 'string' ? item.category : 'Collection')}</p>
                                     <div className="mt-1 text-gray-300 text-sm">
                                         ₹{Math.round(item.price * (1 + item.discount / 100)).toLocaleString()} x {item.quantity}
                                     </div>
