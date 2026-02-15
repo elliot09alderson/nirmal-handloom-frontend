@@ -25,24 +25,25 @@ export const ShopProvider = ({ children }) => {
 
     const addToCart = (product) => {
         setCart((prev) => {
-            const existing = prev.find((item) => item.id === product.id);
+            const productId = product._id || product.id;
+            const existing = prev.find((item) => (item._id || item.id) === productId);
             if (existing) {
                 return prev.map((item) =>
-                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                    (item._id || item.id) === productId ? { ...item, quantity: item.quantity + 1 } : item
                 );
             }
-            return [...prev, { ...product, quantity: 1 }];
+            return [...prev, { ...product, id: productId, quantity: 1 }];
         });
     };
 
     const removeFromCart = (productId) => {
-        setCart((prev) => prev.filter((item) => item.id !== productId));
+        setCart((prev) => prev.filter((item) => (item._id || item.id) !== productId));
     };
 
     const updateQuantity = (productId, amount) => {
         setCart((prev) =>
             prev.map((item) =>
-                item.id === productId
+                (item._id || item.id) === productId
                     ? { ...item, quantity: Math.max(1, item.quantity + amount) }
                     : item
             )
@@ -51,17 +52,18 @@ export const ShopProvider = ({ children }) => {
 
     const addToWishlist = (product) => {
         setWishlist((prev) => {
-            if (prev.find((item) => item.id === product.id)) return prev;
-            return [...prev, product];
+            const productId = product._id || product.id;
+            if (prev.find((item) => (item._id || item.id) === productId)) return prev;
+            return [...prev, { ...product, id: productId }];
         });
     };
 
     const removeFromWishlist = (productId) => {
-        setWishlist((prev) => prev.filter((item) => item.id !== productId));
+        setWishlist((prev) => prev.filter((item) => (item._id || item.id) !== productId));
     };
 
     const isInWishlist = (productId) => {
-        return wishlist.some((item) => item.id === productId);
+        return wishlist.some((item) => (item._id || item.id) === productId);
     };
 
     return (

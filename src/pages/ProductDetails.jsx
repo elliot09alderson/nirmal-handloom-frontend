@@ -73,7 +73,7 @@ const ProductDetails = () => {
     };
 
     // Helper to find item in cart
-    const cartItem = product && cart.find(item => item.id === (product._id || product.id));
+    const cartItem = product && cart.find(item => (item._id || item.id) === (product._id || product.id));
 
     return (
         <div className="container mx-auto px-6 py-24">
@@ -171,14 +171,14 @@ const ProductDetails = () => {
                         {cartItem ? (
                             <div className="flex-1 flex items-center justify-between bg-green-600/90 text-white rounded-sm px-6 py-4 font-bold border border-green-600">
                                 <button
-                                    onClick={() => cartItem.quantity > 1 ? updateQuantity(cartItem.id, -1) : removeFromCart(cartItem.id)}
+                                    onClick={() => cartItem.quantity > 1 ? updateQuantity(cartItem._id || cartItem.id, -1) : removeFromCart(cartItem._id || cartItem.id)}
                                     className="p-1 hover:bg-white/20 rounded-full transition-colors"
                                 >
                                     <FiMinus size={18} />
                                 </button>
                                 <span className="mx-4">{cartItem.quantity} Added</span>
                                 <button
-                                    onClick={() => updateQuantity(cartItem.id, 1)}
+                                    onClick={() => updateQuantity(cartItem._id || cartItem.id, 1)}
                                     className="p-1 hover:bg-white/20 rounded-full transition-colors"
                                 >
                                     <FiPlus size={18} />
